@@ -27,7 +27,7 @@ jobs:
         run: unzip -a idd-cli-linux.zip
 
       - name: create container
-        run: docker build . --file Dockerfile .
+        run: docker build . --file Dockerfile -t whs:bwapp
         
       - name: start bwapp
         run: docker run -d -p 3005:80 raesene/bwapp
