@@ -33,10 +33,10 @@ jobs:
         run: while ! curl -s -o /dev/null http://localhost:3005/login.php; do sleep 1; done
 
       - name: init bwapp
-        run: ./dast-attacker-cli -output-json=results.json -attack-modules=NONE init.bwapp.har 
+        run: ./idd-linux -output-json=results.json -attack-modules=NONE init.bwapp.har 
 
       - name: scan bwapp
-        run: ./dast-attacker-cli -output-json=results.json -output-html=results.html sqli.bwapp.har
+        run: ./idd-linux -output-json=results.json -output-html=results.html sqli.bwapp.har
 
       - name: "upload scan results"
         uses: actions/upload-artifact@v1
