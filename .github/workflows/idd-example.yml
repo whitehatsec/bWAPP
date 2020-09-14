@@ -30,7 +30,7 @@ jobs:
         run: docker build . --file Dockerfile -t whs:bwapp
         
       - name: start bwapp
-        run: docker run -d -p 3005:80 raesene/bwapp
+        run: docker run -d -p 3005:80 whs:bwapp
 
       - name: wait
         run: while ! curl -s -o /dev/null http://localhost:3005/login.php; do sleep 1; done
