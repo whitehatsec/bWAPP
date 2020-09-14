@@ -28,7 +28,7 @@ jobs:
 
       - name: create container
         id: create
-        uses: actions/action@v1
+        uses: ./.github/actions/action
         
       - name: start bwapp
         run: docker run -d -p 3005:80 raesene/bwapp
