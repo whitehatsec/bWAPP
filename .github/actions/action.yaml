@@ -1,6 +1,0 @@
-# action.yml
-name: 'BWapp Container'
-description: 'Create the bBWapp container'
-runs:
-  using: 'docker'
-  image: 'Dockerfile'
