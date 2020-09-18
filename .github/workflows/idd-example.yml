@@ -36,7 +36,7 @@ jobs:
         run: while ! curl -s -o /dev/null http://localhost:3005/login.php; do sleep 1; done
 
       - name: init bwapp
-        run: ./idd-linux -output-json=results.json -attack-modules=NONE init.bwapp.har 
+        run: ./directed-dast-common-linux -output-json=results.json -attack-modules=NONE init.bwapp.har 
 
       - name: scan bwapp
         run: ./directed-dast-common-linux -output-json=results.json -output-html=results.html .scan/sqli.har
