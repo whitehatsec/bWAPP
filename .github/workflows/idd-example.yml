@@ -39,7 +39,7 @@ jobs:
         run: ./directed-dast-common-linux -output-json=results.json -attack-modules=NONE init.bwapp.har 
 
       - name: scan bwapp
-        run: ./directed-dast-common-linux -output-json=results.json -fail-on-severity=High -output-html=results.html .scan/sqli.har
+        run: ./directed-dast-common-linux -output-json=results.json -output-html=results.html .scan/*.har
 
       - name: "upload scan results"
         uses: actions/upload-artifact@v1
