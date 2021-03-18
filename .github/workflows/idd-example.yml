@@ -25,11 +25,10 @@ jobs:
       - name: create container
         run: docker build . --file Dockerfile -t whs:bwapp
         
-      - name: start bwapp
-        run: docker run -d -p 3005:80 whs:bwapp
-
-      - name: wait
-        run: wget --timeout=30 http://localhost:3005/install.php?install=yes
+      - name: start bwapp 
+        run: |
+          docker run -d -p 3005:80 whs:bwapp
+          wget --wait=3 http://localhost:3005/install.php?install=yes
 
       - name: run security test
         run: |
