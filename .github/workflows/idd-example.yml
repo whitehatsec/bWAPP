@@ -28,7 +28,7 @@ jobs:
       - name: start bwapp 
         run: |
           docker run -d -p 3005:80 whs:bwapp
-          wget --wait=3 http://localhost:3005/install.php?install=yes
+          wget --quiet --wait=3 http://localhost:3005/install.php?install=yes
 
       - name: run security test
         run: |
