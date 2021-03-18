@@ -33,13 +33,15 @@ jobs:
         run: docker run -d -p 3005:80 whs:bwapp
 
       - name: wait
-        run: while ! curl -s -o /dev/null http://localhost:3005/login.php; do sleep 1; done
+        run: while ! curl -s -o /dev/null http://localhost:3005/install.php?install=yes; do sleep 1; done
 
-      - name: init bwapp
-        run: ./directed-dast-common-linux -output-json=results.json -attack-modules=NONE init.bwapp.har 
-
-      - name: scan bwapp
-        run: ./directed-dast-common-linux -output-json=results.json -output-html=results.html .scan/*.har
+      - name: run security test
+        run: |
+          sudo npm install -g newman-reporter-har
+          wget https://github.com/whitehatsec-innovations/distribution/releases/latest/download/dast-attacker-cli.deb
+          sudo dpkg -i dast-attacker-cli.deb 
+          sudo dast-attacker-cli -accept-eula=Yes -license-key=f5f7d63e-b55a-4c97-af0b-2fcf240c45b3 -output-html=results.html .scan/*.har
+        # run: ./directed-dast-common-linux -output-json=results.json -output-html=results.html .scan/*.har
 
       - name: "upload scan results"
         uses: actions/upload-artifact@v1
