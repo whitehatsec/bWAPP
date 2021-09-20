@@ -138,7 +138,7 @@ function sqli($data)
 if(isset($_GET["title"]))
 {
     $title = $_GET["title"];   
-    // $title = str_replace($title, "'", "");
+    $title = str_replace($title, "'", "");
     
     $sql = "SELECT * FROM movies WHERE title LIKE '%" . sqli($title) . "%'";
     $recordset = mysql_query($sql, $link);
