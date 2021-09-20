@@ -36,7 +36,7 @@ jobs:
         run: |
           wget https://github.com/whitehatsec-innovations/distribution/releases/latest/download/IDDast.deb          
           sudo apt-get install -f ./IDDast.deb 
-          sudo dast-attacker-cli -accept-eula=Yes -license-key=${{ secrets.LICENSE_KEY }} -output-json=results.json -output-html=results.html .scan/*.har
+          sudo dast-attacker-cli -accept-eula=Yes -fail-on-severity=high -license-key=${{ secrets.LICENSE_KEY }} -output-json=results.json -output-html=results.html .scan/*.har
 
       - name: "upload scan results"
         uses: actions/upload-artifact@v1
