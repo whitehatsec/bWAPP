@@ -146,7 +146,7 @@ if(isset($_GET["title"]))
     if(!$recordset)
     {
 
-        // die("Error: " . mysql_error());
+    // die("Error: " . mysql_error());
 
 ?>
 
