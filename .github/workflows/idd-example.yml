@@ -31,6 +31,7 @@ jobs:
           wget --quiet --wait=3 http://localhost:3005/install.php?install=yes
 
       - name: run security test
+        continue-on-error: true
         env:
           LICENSE_KEY: ${{ secrets.LICENSE_KEY }}
         run: |
