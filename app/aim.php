@@ -42,7 +42,7 @@ include("admin/settings.php");
 
 <p>1. Change the IP address in the settings file (admin/settings.php) to your IP address: <?php echo $_SERVER["REMOTE_ADDR"];?></p>
 
-<p>2. Point your web scanner, crawler or attack tool to this URL: <?php echo "http://" . $_SERVER["HTTP_HOST"] . htmlspecialchars($_SERVER["REQUEST_URI"], ENT_QUOTES, "UTF-8");?></p>
+<p>2. Point your web scanner IDD, crawler or attack tool to this URL: <?php echo "http://" . $_SERVER["HTTP_HOST"] . htmlspecialchars($_SERVER["REQUEST_URI"], ENT_QUOTES, "UTF-8");?></p>
 
 <p>3. Push the button: all hell breaks loose...</p>
 
