@@ -68,7 +68,7 @@ function htmli($data)
 <!--<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>-->
 <script src="js/html5.js"></script>
 
-<title>bWAPP - HTML Injection</title>
+<title>bWAPP - HTML Injection - Whitesnake Rocks!</title>
 
 </head>
 
