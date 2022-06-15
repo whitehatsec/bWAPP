@@ -1,0 +1,526 @@
+{
+	"info": {
+		"_postman_id": "b93910fa-49b7-4d8b-98ea-06a4abc76ae4",
+		"name": "MVP CLM APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20326094"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.json().version)",
+							"    pm.environment.set(\"_affiliation_id\", pm.response.json().version.default_affiliation_id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{_url}}/health",
+					"host": [
+						"{{_url}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth Check*",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{_url}}/auth_check",
+					"host": [
+						"{{_url}}"
+					],
+					"path": [
+						"auth_check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Customer Sign Up Register",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Entra por customers/registrations#create",
+							"",
+							"let date = new Date()",
+							"let y = date.getFullYear();",
+							"let m = `${(date.getMonth()+1)}`.padStart(2,'0');",
+							"let d = `${(date.getDate())}`.padStart(2,'0');",
+							"let h = date.getHours()",
+							"let n = date.getMinutes()",
+							"let s = date.getUTCSeconds()",
+							"var no = `${y}${m}${d}${h}${n}${s}`;",
+							"// pm.environment.set(\"i\", no);",
+							"",
+							"var subtractYears = (numOfYears, date = new Date()) => date.setFullYear(date.getFullYear() - numOfYears);",
+							"var getDate = (years) => new Date(subtractYears(years)).toISOString().split('T')[0];",
+							"var adult = getDate(18)",
+							"var child = getDate(10)",
+							"pm.environment.set(\"_birth_date\", adult);",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.json().customer)",
+							"    pm.environment.set(\"_customer_id\", pm.response.json().customer.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customer\": {\n        \"names\": \"Juan Carlos\",\n        \"first_surname\": \"Montes\",\n        \"last_surname\": \"de la Rosa\",\n        \"cellular_phone_number\": \"{{_mobile}}\",\n        \"birth_date\": \"{{_birth_date}}\",\n        \"password\": \"{{_pwd}}\",\n        \"password_confirmation\": \"{{_pwd}}\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{_url}}/customers",
+					"host": [
+						"{{_url}}"
+					],
+					"path": [
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Customer Sign In",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.json().token)",
+							"    pm.environment.set(\"jwt\", pm.response.json().token.access);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customer\": {\n        \"cellular_phone_number\": \"{{_mobile}}\",\n        \"password\": \"{{_pwd}}\"\n    }\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{_url}}/sessions",
+					"host": [
+						"{{_url}}"
+					],
+					"path": [
+						"sessions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Customer Refresh Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.json().token)",
+							"    pm.environment.set(\"jwt\", pm.response.json().token.access);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{_url}}/sessions/refresh",
+					"host": [
+						"{{_url}}"
+					],
+					"path": [
+						"sessions",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Customer Profile*",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{_url}}/customers/{{_customer_id}}",
+					"host": [
+						"{{_url}}"
+					],
+					"path": [
+						"customers",
+						"{{_customer_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Customer Update*",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customer\": {\n        \"names\": \"Luis Fernando\",\n        \"first_surname\": \"Hernández\",\n        \"last_surname\": \"López\",\n        \"gender\": \"Male\",\n        \"zip_code\": \"06860\",\n        \"email\": \"luis.fernando.h@outlook.com\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{_url}}/customers/{{_customer_id}}",
+					"host": [
+						"{{_url}}"
+					],
+					"path": [
+						"customers",
+						"{{_customer_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign Out Client*",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{_url}}/sessions",
+					"host": [
+						"{{_url}}"
+					],
+					"path": [
+						"sessions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Show Transactions",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{_url}}/customers/{{_customer_id}}/transactions",
+					"host": [
+						"{{_url}}"
+					],
+					"path": [
+						"customers",
+						"{{_customer_id}}",
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction Partial ACC",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"transaction\": {\n        \"cashier_id\": \"1122334455\",\n        \"amount\": \"30\",\n        \"operation_type\": \"ACC\",\n        \"receipt_number\": \"123\",\n        \"metadata\": {},\n        \"affiliation_id\": \"{{_affiliation_id}}\",\n        \"line_items\": [\n            { \"quantity\": 1, \"measurement_unit\": \"piece\", \"unit_price\": 30, \"sku\": \"12344566\" }\n        ],\n        \"date\": \"2022-07-24\",\n        \"payment_methods\": [\n            { \"type\": \"tarjeta_credito\", \"amount\": 30, \"installments\": \"1\" },\n            { \"type\": \"femsacoins\", \"amount\": 10 }\n        ],\n        \"customer_id\": \"{{_customer_id}}\",\n        \"currency\": \"MXN\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{_url}}/transactions",
+					"host": [
+						"{{_url}}"
+					],
+					"path": [
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction Partial RED",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"transaction\": {\n        \"cashier_id\": \"1122334455\",\n        \"amount\": \"10\",\n        \"operation_type\": \"REDEEM\",\n        \"receipt_number\": \"123\",\n        \"metadata\": {},\n        \"affiliation_id\": \"{{_affiliation_id}}\",\n        \"line_items\": [\n            { \"quantity\": 1, \"measurement_unit\": \"piece\", \"unit_price\": 10, \"sku\": \"12344566\" }\n        ],\n        \"date\": \"2022-07-24\",\n        \"payment_methods\": [\n            { \"type\": \"femsacoins\", \"amount\": 10 }\n        ],\n        \"customer_id\": \"{{_customer_id}}\",\n        \"currency\": \"MXN\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{_url}}/transactions",
+					"host": [
+						"{{_url}}"
+					],
+					"path": [
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Customer Sign Up Pre-Register",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customer\": {\n        \"mobile_phone\": \"{{_mobile}}\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{_url}}/customers",
+					"host": [
+						"{{_url}}"
+					],
+					"path": [
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction Partial",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"transaction\": {\n        \"cashier_id\": \"1122334455\",\n        \"amount\": \"3500\",\n        \"operation_type\": \"ACC\",\n        \"receipt_number\": \"123\",\n        \"metadata\": {},\n        \"affiliation_id\": \"{{_affiliation_id}}\",\n        \"line_items\": [\n            { \"quantity\": 1, \"measurement_unit\": \"piece\", \"unit_price\": 1200, \"sku\": 12344566 }\n        ],\n        \"date\": \"2022-07-24\",\n        \"payment_methods\": [\n            { \"type\": \"\", \"amount\": 10.5, \"installments\": \"1\" },\n            { \"type\": \"tarjeta_credito\", \"amount\": 4.5 },\n            { \"type\": \"femsacoins\", \"amount\": 20 }\n        ],\n        \"customer_id\": \"{{customer_id}}\",\n        \"currency\": \"MXN\"\n    }\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{_url}}/ledger_entries",
+					"host": [
+						"{{_url}}"
+					],
+					"path": [
+						"ledger_entries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction Complete",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"transaction\": {\n        \"cashier_id\": \"1122334455\",\n        \"amount\": \"3500\",\n        \"operation_type\": \"ACC\",\n        \"receipt_number\": \"123\",\n        \"metadata\": {},\n        \"affiliation_id\": \"{{_affiliation_id}}\",\n        \"line_items\": [\n            {\n                \"quantity\": 1, \"measurement_unit\": \"piece\", \"unit_price\": 1200, \"sku\": 12344566,\n                \"discount\": 1, \"category\": \"food\", \"taxes_description\": \"IVA\", \"brand\": 0,\n                \"code_bar\": 121421412312, \"taxes\": 15, \"upc\": 0, \"final_price\": 1999\n            }\n        ],\n        \"date\": \"2022-07-24\",\n        \"payment_methods\": [\n            { \"type\": \"\", \"amount\": 10.5, \"installments\": \"1\" },\n            { \"type\": \"tarjeta_credito\", \"amount\": 4.5 },\n            { \"type\": \"femsacoins\", \"amount\": 20 }\n        ],\n        \"customer_id\": \"{{customer_id}}\",\n        \"currency\": \"MXN\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{_url}}/ledger_entries",
+					"host": [
+						"{{_url}}"
+					],
+					"path": [
+						"ledger_entries"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

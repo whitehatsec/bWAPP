@@ -33,11 +33,12 @@ jobs:
       - name: run security test        
         env:
           LICENSE_KEY: ${{ secrets.LICENSE_KEY }}
+# sudo dast-attacker-cli -output-json=results.json -output-html=results.html .scan/*.har          
         run: |
           wget https://github.com/whitehatsec/vantage-prevent-distributions/releases/latest/download/VantagePrevent.deb          
           sudo apt-get install -f ./VantagePrevent.deb
-          sudo dast-attacker-cli -init -license-key=${{ secrets.LICENSE_KEY }} 
-          sudo dast-attacker-cli -output-json=results.json -output-html=results.html .scan/*.har
+          sudo dast-attacker-cli -init -license-key=${{ secrets.LICENSE_KEY }}           
+          sudo dast-attacker-cli -allowed-host=dev.digitalmxce.com -log-level=debug -output-html=results.html .scan/mvp.postman_collection.json .scan/mvp.postman_environment.json 
 
       - name: "upload scan results"
         if: ${{ always() }}
