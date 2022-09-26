@@ -22,8 +22,13 @@ steps:
   inputs:
     command: 'build'
     Dockerfile: '**/Dockerfile'
+    arguments: '-t bwapp'
   displayName: 'Build docker image'
-    
+
+- script: |
+    docker run -d -p 3005:80 bwapp
+  
+
 #- script: |
 #    wget https://github.com/whitehatsec/vantage-prevent-distributions/releases/latest/download/VantagePrevent.deb          
 #    sudo apt-get install -f ./VantagePrevent.deb
