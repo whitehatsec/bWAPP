@@ -22,6 +22,8 @@ steps:
   inputs:
     command: 'build'
     Dockerfile: '**/Dockerfile'
+  displayName: 'Build docker image'
+    
 #- script: |
 #    wget https://github.com/whitehatsec/vantage-prevent-distributions/releases/latest/download/VantagePrevent.deb          
 #    sudo apt-get install -f ./VantagePrevent.deb
