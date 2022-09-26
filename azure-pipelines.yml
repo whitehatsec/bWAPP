@@ -12,13 +12,22 @@ pool:
 variables:
   phpVersion: 7.2
 
+#docker build -t tiredful .
+#docker run -p 8000:8000 --name tiredful -it tiredful
+
+
+
 steps:
-- script: |
-    wget https://github.com/whitehatsec/vantage-prevent-distributions/releases/latest/download/VantagePrevent.deb          
-    sudo apt-get install -f ./VantagePrevent.deb
-    sudo dast-attacker-cli -init -license-key=11dbc457-356c-4fde-a377-f7408300abce  
-    sudo dast-attacker-cli -output-json=results.json -output-html=results.html .scan/*.har
-  displayName: 'Install Prevent'
+- task: Docker@2
+  inputs:
+    command: 'build'
+    Dockerfile: '**/Dockerfile'
+#- script: |
+#    wget https://github.com/whitehatsec/vantage-prevent-distributions/releases/latest/download/VantagePrevent.deb          
+#    sudo apt-get install -f ./VantagePrevent.deb
+#    sudo dast-attacker-cli -init -license-key=11dbc457-356c-4fde-a377-f7408300abce  
+#    sudo dast-attacker-cli -output-json=results.json -output-html=results.html .scan/*.har
+#  displayName: 'Install Prevent'
 
 #- script: composer install --no-interaction --prefer-dist
 #  displayName: 'composer install'
