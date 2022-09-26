@@ -9,25 +9,26 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-variables:
-  phpVersion: 7.2
-
-#docker build -t tiredful .
-#docker run -p 8000:8000 --name tiredful -it tiredful
-
-
-
 steps:
 - task: Docker@2
   inputs:
     command: 'build'
     Dockerfile: '**/Dockerfile'
     arguments: '-t bwapp'
-  displayName: 'Build docker image'
+  displayName: 'build docker image'
 
 - script: |
     docker run -d -p 3005:80 bwapp
-  
+  displayName: 'start bwapp'
+
+- task: Delay@1
+  inputs:
+    delayForMinutes: '.10'
+
+- script: |
+    wget http://localhost:3005/install.php?install=yes
+  displayName: 'init bwapp'
+
 
 #- script: |
 #    wget https://github.com/whitehatsec/vantage-prevent-distributions/releases/latest/download/VantagePrevent.deb          
