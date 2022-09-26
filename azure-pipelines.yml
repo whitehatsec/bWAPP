@@ -16,7 +16,7 @@ steps:
 - script: |
     wget https://github.com/whitehatsec/vantage-prevent-distributions/releases/latest/download/VantagePrevent.deb          
     sudo apt-get install -f ./VantagePrevent.deb
-    sudo dast-attacker-cli -init -license-key=${{ secrets.LICENSE_KEY }} 
+    sudo dast-attacker-cli -init -license-key=32423423423 
     sudo dast-attacker-cli -output-json=results.json -output-html=results.html .scan/*.har
   displayName: 'Install Prevent'
 
