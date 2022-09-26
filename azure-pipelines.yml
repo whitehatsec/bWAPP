@@ -21,9 +21,9 @@ steps:
     docker run -d -p 3005:80 bwapp
   displayName: 'start bwapp'
 
-- task: Delay@1
-  inputs:
-    delayForMinutes: '1'
+- powershell: |
+   Start-Sleep -Seconds 10  
+  displayName: 'PowerShell Script'
 
 - script: |
     wget http://localhost:3005/install.php?install=yes
