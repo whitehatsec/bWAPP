@@ -34,12 +34,15 @@ steps:
     wget https://github.com/whitehatsec/vantage-prevent-distributions/releases/latest/download/VantagePrevent.deb          
     sudo apt-get install -f ./VantagePrevent.deb
     sudo dast-attacker-cli -init -license-key=11dbc457-356c-4fde-a377-f7408300abce  
+  displayName: 'install Prevent'
+
+- script: |
     sudo dast-attacker-cli -output-json=$(Build.ArtifactStagingDirectory)/results.json -output-html=$(Build.ArtifactStagingDirectory)/results.html .scan/*.har
-  displayName: 'Install Prevent'
+  displayName: 'security scan'
 
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'Scan Results HTML'
+    ArtifactName: 'Scan Results'
     publishLocation: 'Container'  
   displayName: 'publish artifacts'
