@@ -22,20 +22,24 @@ steps:
   displayName: 'start bwapp'
 
 - powershell: |
-   Start-Sleep -Seconds 10  
-  displayName: 'PowerShell Script'
+    Start-Sleep -Seconds 5  
+  displayName: 'delay'
 
 - script: |
     wget http://localhost:3005/install.php?install=yes
   displayName: 'init bwapp'
 
 
-#- script: |
-#    wget https://github.com/whitehatsec/vantage-prevent-distributions/releases/latest/download/VantagePrevent.deb          
-#    sudo apt-get install -f ./VantagePrevent.deb
-#    sudo dast-attacker-cli -init -license-key=11dbc457-356c-4fde-a377-f7408300abce  
-#    sudo dast-attacker-cli -output-json=results.json -output-html=results.html .scan/*.har
-#  displayName: 'Install Prevent'
+- script: |
+    wget https://github.com/whitehatsec/vantage-prevent-distributions/releases/latest/download/VantagePrevent.deb          
+    sudo apt-get install -f ./VantagePrevent.deb
+    sudo dast-attacker-cli -init -license-key=11dbc457-356c-4fde-a377-f7408300abce  
+    sudo dast-attacker-cli -output-json=results.json -output-html=results.html .scan/*.har
+  displayName: 'Install Prevent'
 
-#- script: composer install --no-interaction --prefer-dist
-#  displayName: 'composer install'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'Scan Results HTML'
+    publishLocation: 'Container'  
+  displayName: 'publish artifacts'
