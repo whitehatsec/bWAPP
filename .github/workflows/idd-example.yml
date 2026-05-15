@@ -41,19 +41,19 @@ jobs:
 
       - name: "upload scan results"
         if: ${{ always() }}
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@3446296876d12d4e3a0f3145a3c87e67bf0a16b5  # v1
         with:
           name: IDD Scan Results
           path: results.json
 
       - name: "upload html report"
         if: ${{ always() }}
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@3446296876d12d4e3a0f3145a3c87e67bf0a16b5  # v1
         with:
           name: IDD Scan Report
           path: results.html
       - name: "create issue"
         if: ${{ always() }}
-        uses: JasonEtco/create-an-issue@v2
+        uses: JasonEtco/create-an-issue@1b14a70e4d8dc185e5cc76d3bec9eab20257b2c5  # v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
